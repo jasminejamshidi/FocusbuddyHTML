@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Sound Detection & Notifications Test</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Sound Detection Test</h1>
+        
+        <!-- Sound Detection Controls -->
+        <div class="detection-controls">
+            <button id="startButton" onclick="toggleListening()">
+                <span class="material-icons">mic</span>
+                Start Detection
+            </button>
+            <div class="volume-meter-container">
+                <canvas id="volumeMeter"></canvas>
+                <div class="volume-label">Microphone Level</div>
+            </div>
+        </div>
+
+        <!-- Active Reminders Section -->
+        <div class="reminders-section">
+            <h2>Active Reminders</h2>
+            <div class="reminder-list">
+                <div class="reminder-item">
+                    <span class="material-icons">key</span>
+                    <div class="reminder-details">
+                        <h3>Door Lock Detection</h3>
+                        <p>Using model: teachablemachine.withgoogle.com/models/4JaX5pjX6/</p>
+                        <div class="confidence-bar">
+                            <div class="confidence-fill" id="doorLockConfidence"></div>
+                            <span class="confidence-text" id="doorLockPercentage">0%</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="reminder-item">
+                    <span class="material-icons">water_drop</span>
+                    <div class="reminder-details">
+                        <h3>Water Sound Detection</h3>
+                        <p>Using model: teachablemachine.withgoogle.com/models/ssi3h_XXh/</p>
+                        <div class="confidence-bar">
+                            <div class="confidence-fill" id="waterConfidence"></div>
+                            <span class="confidence-text" id="waterPercentage">0%</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Detection Results -->
+        <div class="detection-status">
+            <h2>Detection Results</h2>
+            <div id="label-container"></div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@1.3.1/dist/tf.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/speech-commands@0.4.0/dist/speech-commands.min.js"></script>
+    
+    <!-- Firebase Scripts -->
+    <script src="https://www.gstatic.com/firebasejs/9.x.x/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.x.x/firebase-messaging.js"></script>
+    
+    <!-- Firebase Configuration -->
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyB29CScvZZeSIioWhXgXS1wGr5_vYVp_R0",
+            authDomain: "focusbuddy-notification.firebaseapp.com",
+            projectId: "focusbuddy-notification",
+            storageBucket: "focusbuddy-notification.firebasestorage.app",
+            messagingSenderId: "490889546218",
+            appId: "1:490889546218:web:5f4204a7d1d88253380a93",
+            measurementId: "G-LEW3V85D9X"
+        };
+
+        // Initialize Firebase with VAPID key
+        async function initializeFirebase() {
+            try {
+                firebase.initializeApp(firebaseConfig);
+                const messaging = firebase.messaging();
+
+                const permission = await Notification.requestPermission();
+                console.log('Notification permission:', permission);
+
+                if (permission === 'granted') {
+                    const token = await messaging.getToken({
+                        vapidKey: 'BCGRM-0CaSlHs_HpgsVXrA8aSavD5s1pijKvTiQ_C5cibCwwgotsQsBdFLNCI8pjUDpUojpHFSRo7xXUjK2zeec'
+                    });
+                    console.log('FCM Token:', token);
+
+                    // Add test notification button
+                    const testButton = document.createElement('button');
+                    testButton.innerHTML = 'Test Notification';
+                    testButton.onclick = () => {
+                        showPushNotification(
+                            "Test Notification",
+                            "This is a test notification",
+                            "info"
+                        );
+                    };
+                    document.querySelector('.detection-controls').appendChild(testButton);
+
+                    // Handle foreground messages
+                    messaging.onMessage((payload) => {
+                        console.log('Received foreground message:', payload);
+                        showPushNotification(
+                            payload.notification.title,
+                            payload.notification.body,
+                            payload.data?.type || 'info'
+                        );
+                    });
+                }
+            } catch (error) {
+                console.error('Firebase initialization error:', error);
+                showPushNotification(
+                    "Error",
+                    "Failed to initialize notifications: " + error.message,
+                    "error"
+                );
+            }
+        }
+
+        // Initialize when page loads
+        document.addEventListener('DOMContentLoaded', async () => {
+            await initializeFirebase();
+            await init(); // Your existing initialization function
+        });
+    </script>
+
+    <!-- Your existing sound detection code -->
+    <script src="sound_reminders.js"></script>
+</body>
+</html>

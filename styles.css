@@ -1,0 +1,698 @@
+:root {
+    --primary: #007AFF;
+    --success: #34C759;
+    --error: #FF3B30;
+    --background: #F2F2F7;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    margin: 0;
+    padding: 20px;
+    background: var(--background);
+}
+
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+h1, h2 {
+    color: #1c1c1e;
+}
+
+/* Detection Controls */
+.detection-controls {
+    background: white;
+    padding: 20px;
+    border-radius: 15px;
+    margin: 20px 0;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+button {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 8px;
+    background: var(--primary);
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+button.active {
+    background: var(--error);
+}
+
+/* Reminder List */
+.reminder-item {
+    display: flex;
+    align-items: center;
+    padding: 15px;
+    background: #f5f5f5;
+    border-radius: 12px;
+    margin: 10px 0;
+}
+
+.reminder-item .material-icons {
+    font-size: 24px;
+    margin-right: 15px;
+    color: var(--primary);
+}
+
+.reminder-details {
+    flex: 1;
+    margin-right: 15px;
+    position: relative;
+}
+
+.reminder-details h3 {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.reminder-details p {
+    margin: 5px 0 0;
+    font-size: 14px;
+    color: #666;
+}
+
+/* Switch Toggle */
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 52px;
+    height: 32px;
+}
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #e9e9eb;
+    transition: .4s;
+    border-radius: 32px;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 28px;
+    width: 28px;
+    left: 2px;
+    bottom: 2px;
+    background-color: white;
+    transition: .4s;
+    border-radius: 50%;
+}
+
+input:checked + .slider {
+    background-color: var(--success);
+}
+
+input:checked + .slider:before {
+    transform: translateX(20px);
+}
+
+/* Status and Labels */
+#status {
+    margin-top: 10px;
+    padding: 10px;
+    border-radius: 8px;
+    background: #f2f2f7;
+    color: #8e8e93;
+}
+
+#status.error {
+    background: #ffebeb;
+    color: var(--error);
+}
+
+#label-container {
+    margin-top: 20px;
+}
+
+#label-container div {
+    padding: 10px;
+    margin: 5px 0;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+/* Toast Notifications */
+.toast {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0,0,0,0.8);
+    color: white;
+    padding: 12px 24px;
+    border-radius: 24px;
+    animation: fadeInUp 0.3s ease;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translate(-50%, 20px);
+    }
+    to {
+        opacity: 1;
+        transform: translate(-50%, 0);
+    }
+}
+
+/* Add to your existing CSS */
+.detection-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    margin: 5px 0;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    animation: slideIn 0.3s ease;
+}
+
+.detection-item .sound-type {
+    font-weight: 500;
+    color: #1c1c1e;
+}
+
+.detection-item .confidence {
+    color: var(--primary);
+    font-weight: 500;
+}
+
+.detection-status {
+    display: none; /* Hidden by default */
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Push Notification Styles */
+.push-notification {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    min-width: 300px;
+    max-width: 400px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    overflow: hidden;
+    z-index: 1000;
+    animation: slideIn 0.3s ease;
+}
+
+.push-notification.hiding {
+    animation: slideOut 0.3s ease forwards;
+}
+
+.notification-content {
+    display: flex;
+    align-items: flex-start;
+    padding: 16px;
+}
+
+.notification-icon {
+    margin-right: 12px;
+    font-size: 24px;
+}
+
+.notification-text {
+    flex: 1;
+}
+
+.notification-text h4 {
+    margin: 0;
+    font-size: 16px;
+    color: #1c1c1e;
+}
+
+.notification-text p {
+    margin: 4px 0 0;
+    font-size: 14px;
+    color: #8e8e93;
+}
+
+.close-notification {
+    background: none;
+    border: none;
+    padding: 4px;
+    margin: -4px;
+    cursor: pointer;
+    color: #8e8e93;
+}
+
+.close-notification:hover {
+    color: #1c1c1e;
+}
+
+.notification-progress {
+    height: 3px;
+    background: var(--primary);
+    animation: progress 5s linear;
+}
+
+/* Notification Types */
+.push-notification.success .notification-icon {
+    color: var(--success);
+}
+
+.push-notification.warning .notification-icon {
+    color: #FF9500;
+}
+
+.push-notification.error .notification-icon {
+    color: var(--error);
+}
+
+.push-notification.info .notification-icon {
+    color: var(--primary);
+}
+
+/* Notification Animations */
+@keyframes slideIn {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes slideOut {
+    from {
+        transform: translateX(0);
+        opacity: 1;
+    }
+    to {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+}
+
+@keyframes progress {
+    from {
+        width: 100%;
+    }
+    to {
+        width: 0%;
+    }
+}
+
+/* Stack multiple notifications */
+.push-notification:nth-child(2) {
+    top: 100px;
+}
+
+.push-notification:nth-child(3) {
+    top: 180px;
+}
+
+/* Make notifications responsive */
+@media (max-width: 480px) {
+    .push-notification {
+        width: calc(100% - 40px);
+        min-width: unset;
+        max-width: unset;
+    }
+}
+
+/* Add these styles for the loading indicator */
+#loading-indicator {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 10px;
+    color: var(--primary);
+}
+
+.spinner {
+    width: 20px;
+    height: 20px;
+    border: 3px solid #f3f3f3;
+    border-top: 3px solid var(--primary);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Add animation for smooth transitions */
+@keyframes pulse {
+    0% { opacity: 0.6; }
+    50% { opacity: 1; }
+    100% { opacity: 0.6; }
+}
+
+#volumeMeter.active {
+    animation: pulse 2s infinite;
+}
+
+.reminders-section {
+    background: white;
+    border-radius: 15px;
+    padding: 20px;
+    margin: 20px 0;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+/* Confidence bar styles */
+.confidence-bar {
+    margin-top: 8px;
+    background: #f0f0f0;
+    height: 4px;
+    border-radius: 2px;
+    position: relative;
+    overflow: hidden;
+}
+
+.confidence-fill {
+    height: 100%;
+    width: 0%;
+    background: var(--primary);
+    transition: width 0.3s ease;
+}
+
+.confidence-text {
+    position: absolute;
+    right: 0;
+    top: -18px;
+    font-size: 12px;
+    color: var(--primary);
+    font-weight: 500;
+}
+
+.custom-reminders-section {
+    background: white;
+    padding: 20px;
+    border-radius: 15px;
+    margin: 20px 0;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.custom-reminder-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-top: 15px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.form-group label {
+    font-size: 14px;
+    color: #666;
+}
+
+.form-group input,
+.form-group select {
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 16px;
+}
+
+.create-reminder-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 12px;
+    background: var(--primary);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.custom-reminder-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px;
+    margin: 10px 0;
+    background: #f5f5f5;
+    border-radius: 8px;
+}
+
+.reminder-info h3 {
+    margin: 0;
+    font-size: 16px;
+}
+
+.reminder-info p {
+    margin: 5px 0;
+    color: #666;
+}
+
+.reminder-time {
+    font-size: 12px;
+    color: var(--primary);
+}
+
+.delete-btn {
+    background: none;
+    border: none;
+    color: #FF3B30;
+    cursor: pointer;
+    padding: 4px;
+}
+
+.delete-btn:hover {
+    opacity: 0.8;
+}
+
+.preset-reminders {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin: 20px 0;
+}
+
+.preset-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 20px;
+    background: #f5f5f5;
+    color: #333;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.preset-btn:hover {
+    background: #e5e5e5;
+    transform: translateY(-1px);
+}
+
+.preset-btn .material-icons {
+    font-size: 20px;
+    color: var(--primary);
+}
+
+.custom-reminder-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px;
+    margin: 10px 0;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.reminder-controls {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.reminder-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.edit-btn,
+.delete-btn {
+    background: none;
+    border: none;
+    padding: 8px;
+    cursor: pointer;
+    border-radius: 50%;
+    transition: all 0.2s ease;
+}
+
+.edit-btn {
+    color: var(--primary);
+}
+
+.delete-btn {
+    color: var(--error);
+}
+
+.edit-btn:hover,
+.delete-btn:hover {
+    background: #f5f5f5;
+}
+
+.reminder-time {
+    font-size: 14px;
+    color: #666;
+    margin-left: 8px;
+}
+
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.add-reminder-btn {
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    border-radius: 50%;
+    background: var(--primary);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+.add-reminder-btn:hover {
+    transform: scale(1.1);
+}
+
+.dialog-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0,0,0,0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.dialog-content {
+    background: white;
+    padding: 24px;
+    border-radius: 12px;
+    width: 90%;
+    max-width: 400px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+}
+
+.dialog-form {
+    margin: 20px 0;
+}
+
+.dialog-buttons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    margin-top: 24px;
+}
+
+.cancel-btn {
+    background: #f5f5f5;
+    color: #333;
+}
+
+.save-btn {
+    background: var(--primary);
+    color: white;
+}
+
+.dialog-buttons button {
+    padding: 8px 16px;
+    border-radius: 6px;
+}
+
+.time-input-group {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.time-input {
+    flex: 1;
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 16px;
+}
+
+.period-select {
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 16px;
+    background: white;
+    cursor: pointer;
+}
+
+.period-select:hover {
+    background: #f5f5f5;
+}
+
+.test-btn {
+    background: var(--primary);
+    margin-left: 10px;
+}
+
+.debug-message {
+    color: #00ff00;
+    margin: 2px 0;
+}
+
+.debug-error {
+    color: #ff0000;
+}
+ 
